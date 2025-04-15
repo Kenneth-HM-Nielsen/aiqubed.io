@@ -23,6 +23,76 @@ header p {
     color: #999;
 }
 
+.navbar {
+    background-color: #111;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 2em;
+    border-bottom: 1px solid #333;
+    position: relative;
+    z-index: 9999; /* 💥 Ensures it sits on top of everything */
+}
+
+.logo a {
+    color: #66ccff;
+    font-size: 1.5em;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 2em;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    position: relative;
+}
+
+.nav-links a {
+    color: #eee;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    color: #66ccff;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;         /* ✅ anchor it to the right of the li */
+    min-width: 160px;
+    background-color: #1a1a1a;
+    z-index: 10000;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    white-space: nowrap;
+}
+
+.dropdown-content li {
+    padding: 0.5em 1em;
+}
+
+.dropdown-content li a {
+    color: white;
+    display: block;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
 .intro {
     padding: 2em;
     text-align: center;
@@ -42,15 +112,58 @@ header p {
 }
 
 .team {
-    padding: 2em;
-    background-color: #1a1a1a;
+    background-color: #121212;
+    padding: 3em 2em;
     text-align: center;
 }
 
 .team h2 {
-    font-size: 1.8em;
-    margin-bottom: 1em;
+    font-size: 2em;
+    margin-bottom: 1.5em;
+    color: #66ccff;
 }
+
+.team-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+    justify-content: center;
+}
+
+.team-member {
+    background-color: #1e1e1e;
+    padding: 1.5em;
+    border-radius: 10px;
+    width: 250px;
+    text-align: center;
+    color: #eee;
+    transition: transform 0.3s ease;
+}
+
+.team-member:hover {
+    transform: translateY(-5px);
+}
+
+.team-member img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1em;
+    border: 2px solid #444;
+}
+
+.team-member h4 {
+    margin: 0.5em 0 0.2em;
+    font-size: 1.2em;
+}
+
+.team-member .title {
+    font-size: 0.95em;
+    color: #aaa;
+    margin-bottom: 0.5em;
+}
+
 
 .profiles {
     display: flex;
