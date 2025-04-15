@@ -1,0 +1,95 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #0f0f0f;
+    color: #f0f0f0;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #151515;
+    padding: 2em;
+    text-align: center;
+    border-bottom: 1px solid #333;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin: 0 0 0.2em;
+}
+
+header p {
+    font-size: 1.1em;
+    color: #999;
+}
+
+.intro {
+    padding: 2em;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.founders {
+    padding: 2em;
+    background-color: #1a1a1a;
+    text-align: center;
+}
+
+.founders h2 {
+    font-size: 1.8em;
+    margin-bottom: 1em;
+}
+
+.profiles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2em;
+}
+
+.profile {
+    background-color: #222;
+    padding: 1.5em;
+    width: 280px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.profile:hover {
+    transform: scale(1.02);
+}
+
+.profile h3 {
+    margin-top: 0;
+    color: #66ccff;
+}
+
+.profile .short {
+    font-weight: bold;
+    color: #ccc;
+}
+
+.profile .bio {
+    margin-top: 1em;
+    font-size: 0.95em;
+    color: #aaa;
+    display: none;
+}
+
+.footer {
+    text-align: center;
+    padding: 2em;
+    color: #777;
+    font-size: 0.9em;
+}
+.profile-pic {
+    width: 100%;
+    max-width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1em;
+    border: 2px solid #444;
+}
