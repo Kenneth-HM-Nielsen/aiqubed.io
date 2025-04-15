@@ -41,6 +41,17 @@ header p {
     margin-bottom: 1em;
 }
 
+.team {
+    padding: 2em;
+    background-color: #1a1a1a;
+    text-align: center;
+}
+
+.team h2 {
+    font-size: 1.8em;
+    margin-bottom: 1em;
+}
+
 .profiles {
     display: flex;
     flex-wrap: wrap;
