@@ -4,32 +4,33 @@ from ydata_profiling import ProfileReport
 import streamlit.components.v1 as components
 import tempfile
 
-st.set_page_config(page_title="Debt Collections Data Quality Dashboard", layout="wide")
+st.set_page_config(page_title="Data Quality Dashboard", layout="wide")
 
-st.title("📊 Data Quality Dashboard")
+st.title("📊 Debt Collection Data Quality & Profiling")
 
 st.write("""
-Upload a CSV file to inspect the data structure, detect issues, and profile its quality before submission.
+Upload a dataset submitted by a finance organization to profile its structure, check for missing values, outliers, data types, and other potential issues before submission.
 """)
 
-uploaded_file = st.file_uploader("Upload CSV", type="csv")
+# File upload
+uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
 
-if uploaded_file:
+if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
 
-    st.subheader("📄 Data Preview")
+    st.subheader("📄 Raw Data Preview")
     st.dataframe(df.head())
 
     st.subheader("📈 Data Profiling Report")
 
-    # Generate the profile
-    profile = ProfileReport(df, title="Debt Collections Data Profiling Report", explorative=True)
+    # Create profile and save it to a temp file
+    profile = ProfileReport(df, title="Debt Collection Data Quality Report", explorative=True)
 
-    # Use a temp file to save and render the report
     with tempfile.NamedTemporaryFile(suffix=".html", delete=False) as tmp_file:
         profile.to_file(tmp_file.name)
-        with open(tmp_file.name, "r", encoding='utf-8') as f:
+        with open(tmp_file.name, "r", encoding="utf-8") as f:
             report_html = f.read()
         components.html(report_html, height=1000, scrolling=True)
+
 else:
-    st.info("⬆️ Please upload a CSV file to see the profiling dashboard.")
+    st.info("⬆️ Upload a .csv file to begin.")
