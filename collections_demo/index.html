@@ -2,58 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Collections Dashboard Demo | AIQubed Consulting</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #0f0f0f;
-      color: #f0f0f0;
-    }
-
-    header {
-      background-color: #151515;
-      padding: 1em 2em;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #333;
-    }
-
-    header h1 {
-      font-size: 1.5em;
-      margin: 0;
-      color: #66ccff;
-    }
-
-    .back-link {
-      background-color: #66ccff;
-      color: #0f0f0f;
-      text-decoration: none;
-      padding: 0.5em 1em;
-      border-radius: 5px;
-      font-weight: bold;
-      transition: background-color 0.2s ease;
-    }
-
-    .back-link:hover {
-      background-color: #99ddff;
-    }
-
-    iframe {
-      border: none;
-      width: 100%;
-      height: calc(100vh - 80px); /* Adjust height to leave space for header */
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collections Demo Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.18.2.min.js"></script>
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Collections Dashboard Demo</h1>
-    <a href="/" class="back-link">← Back to AIQubed</a>
-  </header>
-
-  <iframe src="https://aiqubed-io-collections-demo.onrender.com"></iframe>
+  <h1>📊 Collections Data Quality Dashboard</h1>
+  <div class="upload-box">
+    <input type="file" id="csvFileInput" accept=".csv" />
+  </div>
+  <div id="summary"></div>
+  <div id="charts"></div>
 </body>
 </html>
