@@ -1,4 +1,6 @@
 document.getElementById('csvFileInput').addEventListener('change', function (e) {
+    console.log("📦 script.js is loaded");
+    
     const file = e.target.files[0];
     if (!file) return;
   
