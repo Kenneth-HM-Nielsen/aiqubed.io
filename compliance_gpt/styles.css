@@ -97,3 +97,56 @@ body {
   list-style: disc;
   margin-bottom: 0.3em;
 }
+/* === Side-by-side layout container === */
+.layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  min-height: calc(100vh - 60px); /* adjusts for banner/header */
+}
+
+/* === Left column: Chat interface === */
+.chat-section {
+  flex: 2;
+  padding: 2em;
+  max-width: 65%;
+}
+
+/* === Right column: Sources panel === */
+.sources-panel {
+  flex: 1;
+  padding: 2em;
+  background-color: #1a1a1a;
+  border-left: 1px solid #333;
+  height: 100vh;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+}
+
+.sources-panel h2 {
+  color: #66ccff;
+  font-size: 1.4em;
+  margin-top: 0;
+}
+
+.source-list {
+  list-style: disc;
+  padding-left: 1.2em;
+}
+
+.source-list li {
+  margin-bottom: 0.5em;
+  font-size: 0.9em;
+  color: #ccc;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    flex-direction: column;
+  }
+  .chat-section, .sources-panel {
+    max-width: 100%;
+  }
+}
