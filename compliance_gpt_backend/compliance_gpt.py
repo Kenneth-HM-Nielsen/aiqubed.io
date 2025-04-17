@@ -40,10 +40,21 @@ async def ask_question(request: Request):
     try:
         body = await request.json()
         question = body.get("question")
+        mode = body.get("mode", "chat")
+
         if not question:
             return JSONResponse(status_code=400, content={"error": "Missing question"})
 
-        result = qa_chain({"query": question})
+        if mode == "sop":
+            sop_prompt = (
+                "Based on applicable Danish regulation, please write a structured and professional "
+                "Standard Operating Procedure (SOP) for the following task:\n\n" + question
+            )
+            result = qa_chain.invoke({"query": sop_prompt})
+        else:
+            result = qa_chain.invoke({"query": question})
+
         return {"answer": result["result"]}
+
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
