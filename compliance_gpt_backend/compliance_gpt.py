@@ -26,7 +26,12 @@ app.add_middleware(
 # Load vectorstore + models on startup
 llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0, openai_api_key=OPENAI_API_KEY)
 embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
-vectorstore = FAISS.load_local("vectorstore/compliance-laws", embeddings)
+#vectorstore = FAISS.load_local("vectorstore/compliance-laws", embeddings)
+vectorstore = FAISS.load_local(
+    "vectorstore/compliance-laws",
+    embeddings,
+    allow_dangerous_deserialization=True
+)
 retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 4})
 qa_chain = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
 
