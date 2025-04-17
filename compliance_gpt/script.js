@@ -12,25 +12,23 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function appendSources(sourceArray) {
-    if (!sourceArray || sourceArray.length === 0) return;
+    const list = document.getElementById("sourceList");
+    list.innerHTML = ""; // Clear previous sources
 
-    const container = document.createElement("div");
-    container.classList.add("sources");
+    if (!sourceArray || sourceArray.length === 0) {
+      const empty = document.createElement("li");
+      empty.textContent = "No sources available for this response.";
+      list.appendChild(empty);
+      return;
+    }
 
-    const title = document.createElement("em");
-    title.textContent = "Sources:";
-    container.appendChild(title);
-
-    const list = document.createElement("ul");
     sourceArray.forEach(src => {
       const li = document.createElement("li");
       li.textContent = src + "...";
       list.appendChild(li);
     });
-
-    container.appendChild(list);
-    chatLog.appendChild(container);
   }
+
 
   async function sendToBackend(mode = "chat") {
     const question = input.value.trim();
