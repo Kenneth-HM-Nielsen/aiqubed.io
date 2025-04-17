@@ -12,14 +12,18 @@
     <a href="/" class="back-link">← Back to AIQubed</a>
   </header>
 
-  <main class="container">
+  <main class="layout">
+  <!-- Left: Chat Interface -->
+  <section class="chat-section">
     <h1>Welcome to ComplianceGPT</h1>
-    <p class="subtitle">Financial institutions have to be on top of a plethora of laws and guidelines. </br>
+    <p class="subtitle">
+      Financial institutions have to be on top of a plethora of laws and guidelines. </br>
     Sometimes, this means that while processes as stipulated in SOPs are being followed, those processes are outdated. </br> 
     We believe that GenAI can be a powerful companion in quick QnA on specific laws, as a means of drafting new SOPs 
     and also as a way to perform gap-anayses on current SOPs. </br>Therefore, we've developed ComplianceGPT. </br>
     It is still in development mode — but feel free to test it out! We are continuously adding new laws to it. 
-  </br> (And obviously, it should not be considered as a legal foundation in any way, shape or form!) </p>
+  </br> (And obviously, it should not be considered as a legal foundation in any way, shape or form!) 
+    </p>
 
     <div class="chat-container">
       <div id="chat-log" class="chat-log"></div>
@@ -30,6 +34,14 @@
         <button id="sopBtn">Generate SOP</button>
       </div>
     </div>
-  </main>
+  </section>
+
+  <!-- Right: Sources -->
+  <aside class="sources-panel">
+    <h2>Sources</h2>
+    <ul id="sourceList" class="source-list"></ul>
+  </aside>
+</main>
+
 </body>
 </html>
