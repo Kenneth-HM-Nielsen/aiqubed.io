@@ -1,0 +1,44 @@
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+from langchain.chat_models import ChatOpenAI
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
+from langchain.chains import RetrievalQA
+import os
+
+# ✅ Get your OpenAI key from environment (safe for public repos)
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+if not OPENAI_API_KEY:
+    raise ValueError("OPENAI_API_KEY not set in environment.")
+
+app = FastAPI()
+
+# Allow frontend calls from your domain
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Or restrict to ["https://aiqubed.io"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Load vectorstore + models on startup
+llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0, openai_api_key=OPENAI_API_KEY)
+embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
+vectorstore = FAISS.load_local("vectorstore/compliance-laws", embeddings)
+retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 4})
+qa_chain = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
+
+@app.post("/ask")
+async def ask_question(request: Request):
+    try:
+        body = await request.json()
+        question = body.get("question")
+        if not question:
+            return JSONResponse(status_code=400, content={"error": "Missing question"})
+
+        result = qa_chain({"query": question})
+        return {"answer": result["result"]}
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
