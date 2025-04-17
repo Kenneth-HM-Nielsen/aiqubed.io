@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
       input.value = "";
   
       try {
-        const res = await fetch("https://YOUR-BACKEND-URL/ask", {
+        const res = await fetch("https://aiqubed-io.onrender.com/ask", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ question }),
