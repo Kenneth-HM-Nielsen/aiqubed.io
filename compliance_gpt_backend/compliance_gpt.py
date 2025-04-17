@@ -5,6 +5,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chains import RetrievalQA
+import traceback 
 import os
 
 # ✅ Get your OpenAI key from environment (safe for public repos)
@@ -57,4 +58,6 @@ async def ask_question(request: Request):
         return {"answer": result["result"]}
 
     except Exception as e:
+        print("🔥 Internal Server Error:")
+        traceback.print_exc()
         return JSONResponse(status_code=500, content={"error": str(e)})
