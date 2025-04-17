@@ -22,7 +22,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0, openai_api_key=OPENAI_API_KEY)
+llm = ChatOpenAI(
+    model="gpt-3.5-turbo",
+    temperature=0,
+    openai_api_key=OPENAI_API_KEY
+)
+
 embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
 
 vectorstore = FAISS.load_local(
@@ -31,7 +36,10 @@ vectorstore = FAISS.load_local(
     allow_dangerous_deserialization=True
 )
 
-retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 6})
+retriever = vectorstore.as_retriever(
+    search_type="similarity",  # Or try "mmr" for better diversity
+    search_kwargs={"k": 6}
+)
 
 qa_chain = RetrievalQAWithSourcesChain.from_chain_type(
     llm=llm,
@@ -52,15 +60,22 @@ async def ask_question(request: Request):
 
         if mode == "sop":
             sop_prompt = (
-                "As a compliance assistant trained on Danish financial law, please draft a practical and informative "
-                "Standard Operating Procedure (SOP) that outlines how to handle the following task in alignment with relevant regulation:\n\n"
-                + question
+                "You are a compliance assistant trained on Danish financial law. "
+                "Draft a structured Standard Operating Procedure (SOP) ONLY using content from the retrieved legal sources. "
+                "If no relevant legal basis exists in the sources, respond: 'Der findes ikke tilstrækkeligt grundlag i materialet til at udarbejde en SOP.'\n\n"
+                f"Spørgsmål: {question}"
             )
             result = qa_chain.invoke({"question": sop_prompt})
-        else:
-            result = qa_chain.invoke({"question": question})
 
-        # Collect source document snippets
+        else:
+            grounded_prompt = (
+                "Answer ONLY using the retrieved legal documents. "
+                "If the answer is not clearly stated in the documents, respond: 'Det fremgår ikke tydeligt af det tilgængelige materiale.'\n\n"
+                f"Spørgsmål: {question}"
+            )
+            result = qa_chain.invoke({"question": grounded_prompt})
+
+        # Extract relevant source snippets
         sources = [
             doc.page_content[:300].strip().replace("\n", " ")
             for doc in result.get("source_documents", [])
