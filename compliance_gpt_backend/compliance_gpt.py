@@ -33,7 +33,7 @@ vectorstore = FAISS.load_local(
     embeddings,
     allow_dangerous_deserialization=True
 )
-retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 4})
+retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 8})
 qa_chain = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
 
 @app.post("/ask")
@@ -48,8 +48,9 @@ async def ask_question(request: Request):
 
         if mode == "sop":
             sop_prompt = (
-                "Based on applicable Danish regulation, please write a structured and professional "
-                "Standard Operating Procedure (SOP) for the following task:\n\n" + question
+                "As a compliance assistant trained on Danish financial law, please draft a practical and informative "
+                "Standard Operating Procedure (SOP) that outlines how to handle the following task in alignment with relevant regulation:\n\n"
+                + question
             )
             result = qa_chain.invoke({"query": sop_prompt})
         else:
