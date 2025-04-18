@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pkl
+
+# Environments
+.env
+.venv/
+env/
+
+# Logs and system files
+*.log
+.DS_Store
+
+# VSCode
+*.code-workspace
+.vscode/
+
+# Vectorstore
+compliance_gpt_backend/vectorstore/**/*.faiss
+compliance_gpt_backend/vectorstore/**/*.pkl
+compliance_gpt_backend/vectorstore/**/*.zip
+
+# Notebook junk
+.ipynb_checkpoints
