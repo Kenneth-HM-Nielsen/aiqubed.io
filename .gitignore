@@ -19,7 +19,7 @@ env/
 # Vectorstore
 compliance_gpt_backend/vectorstore/**/*.faiss
 compliance_gpt_backend/vectorstore/**/*.pkl
-compliance_gpt_backend/vectorstore/**/*.zip
+#compliance_gpt_backend/vectorstore/**/*.zip
 
 # Notebook junk
 .ipynb_checkpoints
