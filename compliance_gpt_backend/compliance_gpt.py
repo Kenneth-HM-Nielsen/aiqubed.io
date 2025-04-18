@@ -23,8 +23,8 @@ app.add_middleware(
 )
 
 llm = ChatOpenAI(
-    model="gpt-3.5-turbo",
-    temperature=0,
+    model="gpt-4o",
+    temperature=0.3,
     openai_api_key=OPENAI_API_KEY
 )
 
