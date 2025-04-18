@@ -4,6 +4,6 @@ echo "🔧 Installing dependencies..."
 pip install -r requirements.txt
 
 echo "📦 Unzipping vectorstore..."
-unzip -o compliance_gpt_backend/vectorstore/compliance-laws.zip -d compliance_gpt_backend/vectorstore/
+unzip -o compliance_gpt_backend/vectorstore/compliance-laws.zip -d compliance_gpt_backend/vectorstore/compliance-laws/
 
 echo "✅ Build complete."
