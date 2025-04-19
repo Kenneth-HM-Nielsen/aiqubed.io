@@ -15,7 +15,7 @@ if not OPENAI_API_KEY:
 
 # Folders
 pdf_folder = Path("compliance_pdfs")
-output_folder = Path("compliance_gpt_backend/vectorstore/compliance-laws")
+output_folder = Path("vectorstore/compliance-laws")
 output_folder.mkdir(parents=True, exist_ok=True)
 
 # Chunking config
