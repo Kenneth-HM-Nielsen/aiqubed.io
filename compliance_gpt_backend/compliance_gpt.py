@@ -70,8 +70,10 @@ async def ask_question(request: Request):
         else:
             grounded_prompt = (
                 "You are a compliance assistant trained on Danish financial law. "
+                "Assume all questions to be referring to the retrieved legal documents. So, openended questions like 'Hvad er ...?' should be interpreted as 'Hvordan defineres ... i lovgivningen?'"
                 "Answer ONLY using the retrieved legal documents. "
-                "If the answer is not clearly stated in the documents, respond: 'Det fremgår ikke tydeligt af det tilgængelige materiale, prøv eventuelt at omformuler dit spørgsmål og vær mere specifik.'\n\n"
+                "If the answer is not clearly stated in the documents, respond: 'Det fremgår ikke tydeligt af det tilgængelige materiale, "
+                "prøv eventuelt at omformuler dit spørgsmål og vær mere specifik. F.eks. Hvad er hvidvask => Hvordan defineres hvidvask i lovgivningen?'\n\n"
                 f"Spørgsmål: {question}"
             )
             result = qa_chain.invoke({"question": grounded_prompt})
