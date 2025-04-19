@@ -4,17 +4,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain.chains import RetrievalQAWithSourcesChain
+from langchain.chains import RetrievalQA
 import os
 import traceback
 from pathlib import Path
 
+# Load API key
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY not set in environment.")
 
+# FastAPI app setup
 app = FastAPI()
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -23,6 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# LLM and embedder setup
 llm = ChatOpenAI(
     model="gpt-4o",
     temperature=0.4,
@@ -31,6 +33,7 @@ llm = ChatOpenAI(
 
 embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
 
+# Load vectorstore
 vectorstore = FAISS.load_local(
     "vectorstore/compliance-laws",
     embeddings,
@@ -38,28 +41,29 @@ vectorstore = FAISS.load_local(
 )
 
 retriever = vectorstore.as_retriever(
-    search_type="similarity",  # Or try "mmr" for better diversity
+    search_type="similarity",
     search_kwargs={"k": 8}
 )
 
-qa_chain = RetrievalQAWithSourcesChain.from_chain_type(
+# Chain setup
+qa_chain = RetrievalQA.from_chain_type(
     llm=llm,
     chain_type="stuff",
     retriever=retriever,
     return_source_documents=True
 )
 
+# Endpoint: List available laws
 @app.get("/laws")
 async def list_available_laws():
     pdf_folder = Path("compliance_pdfs")
     laws = []
-
     for pdf_file in pdf_folder.glob("*.pdf"):
         name = pdf_file.stem.replace("_", " ").capitalize()
         laws.append(name)
-
     return {"laws": sorted(laws)}
 
+# Endpoint: Ask questions or generate SOPs
 @app.post("/ask")
 async def ask_question(request: Request):
     try:
@@ -70,6 +74,7 @@ async def ask_question(request: Request):
         if not question:
             return JSONResponse(status_code=400, content={"error": "Missing question"})
 
+        # Mode: SOP generation
         if mode == "sop":
             sop_prompt = (
                 "You are a compliance assistant trained on Danish financial law. "
@@ -77,29 +82,34 @@ async def ask_question(request: Request):
                 "If no relevant legal basis exists in the sources, respond: 'Der findes ikke tilstrækkeligt grundlag i materialet til at udarbejde en SOP.'\n\n"
                 f"Spørgsmål: {question}"
             )
-            result = qa_chain.invoke({"question": sop_prompt})
+            result = qa_chain({"query": sop_prompt})
 
+        # Mode: regular question
         else:
             grounded_prompt = (
                 "You are a compliance assistant trained on Danish financial law. "
-                "Assume all questions to be referring to the retrieved legal documents. So, openended questions like 'Hvad er ...?' should be interpreted as 'Hvordan defineres ... i lovgivningen?'"
+                "Assume all questions to be referring to the retrieved legal documents. So, openended questions like 'Hvad er ...?' should be interpreted as 'Hvordan defineres ... i lovgivningen?' "
                 "Answer ONLY using the retrieved legal documents. "
                 "If the answer is not clearly stated in the documents, respond: 'Det fremgår ikke tydeligt af det tilgængelige materiale, "
                 "prøv eventuelt at omformuler dit spørgsmål og vær mere specifik. F.eks. Hvad er hvidvask => Hvordan defineres hvidvask i lovgivningen?'\n\n"
                 f"Spørgsmål: {question}"
             )
-            result = qa_chain.invoke({"question": grounded_prompt})
+            result = qa_chain({"query": grounded_prompt})
 
-        # Extract relevant source snippets
+        # Extract rich source metadata
         sources = []
         for doc in result.get("source_documents", []):
             name = doc.metadata.get("source", "ukendt dokument").replace(".pdf", "").replace("_", " ").capitalize()
             page = doc.metadata.get("page", "ukendt side")
             snippet = doc.page_content.strip().replace("\n", " ")[:300]
-            sources.append(f"{name}, side {page}: {snippet}...")
+            sources.append({
+                "title": name,
+                "page": page,
+                "snippet": snippet
+            })
 
         return {
-            "answer": result["answer"],
+            "answer": result["result"],
             "sources": sources
         }
 
