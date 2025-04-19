@@ -41,10 +41,10 @@ vectorstore = FAISS.load_local(
 )
 
 retriever = vectorstore.as_retriever(
-    #search_type="similarity",
-    #search_kwargs={"k": 8}
-    search_type="mmr",  
-    search_kwargs={"k": 14, "lambda_mult": 0.8}
+    search_type="similarity",
+    search_kwargs={"k": 14}
+    #search_type="mmr",  
+    #search_kwargs={"k": 14, "lambda_mult": 0.8}
 )
 
 # Chain setup
