@@ -38,7 +38,7 @@ vectorstore = FAISS.load_local(
 
 retriever = vectorstore.as_retriever(
     search_type="similarity",  # Or try "mmr" for better diversity
-    search_kwargs={"k": 6}
+    search_kwargs={"k": 8}
 )
 
 qa_chain = RetrievalQAWithSourcesChain.from_chain_type(
@@ -69,8 +69,9 @@ async def ask_question(request: Request):
 
         else:
             grounded_prompt = (
+                "You are a compliance assistant trained on Danish financial law. "
                 "Answer ONLY using the retrieved legal documents. "
-                "If the answer is not clearly stated in the documents, respond: 'Det fremgår ikke tydeligt af det tilgængelige materiale.'\n\n"
+                "If the answer is not clearly stated in the documents, respond: 'Det fremgår ikke tydeligt af det tilgængelige materiale, prøv eventuelt at omformuler dit spørgsmål og vær mere specifik.'\n\n"
                 f"Spørgsmål: {question}"
             )
             result = qa_chain.invoke({"question": grounded_prompt})
