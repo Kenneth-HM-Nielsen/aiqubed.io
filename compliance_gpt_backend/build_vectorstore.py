@@ -20,8 +20,8 @@ output_folder.mkdir(parents=True, exist_ok=True)
 
 # Chunking config
 splitter = RecursiveCharacterTextSplitter(
-    chunk_size=600,
-    chunk_overlap=250,
+    chunk_size=1000,
+    chunk_overlap=200,
      separators=["\n\n", "\n", ".", " ", ""]
 )
 
