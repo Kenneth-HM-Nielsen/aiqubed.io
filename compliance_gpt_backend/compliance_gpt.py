@@ -7,6 +7,7 @@ from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQAWithSourcesChain
 import os
 import traceback
+from pathlib import Path
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
@@ -47,6 +48,17 @@ qa_chain = RetrievalQAWithSourcesChain.from_chain_type(
     retriever=retriever,
     return_source_documents=True
 )
+
+@app.get("/laws")
+async def list_available_laws():
+    pdf_folder = Path("compliance_pdfs")
+    laws = []
+
+    for pdf_file in pdf_folder.glob("*.pdf"):
+        name = pdf_file.stem.replace("_", " ").capitalize()
+        laws.append(name)
+
+    return {"laws": sorted(laws)}
 
 @app.post("/ask")
 async def ask_question(request: Request):

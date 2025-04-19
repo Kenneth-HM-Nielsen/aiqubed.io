@@ -84,4 +84,23 @@ document.addEventListener("DOMContentLoaded", () => {
   input.addEventListener("keypress", (e) => {
     if (e.key === "Enter") sendToBackend("chat");
   });
+
+  fetch("https://aiqubed-io.onrender.com/laws")
+  .then((res) => res.json())
+  .then((data) => {
+    const lawList = document.getElementById("available-laws");
+    if (!data.laws || data.laws.length === 0) {
+      lawList.innerHTML = "<li>Ingen tilgængelige lovtekster fundet.</li>";
+      return;
+    }
+
+    data.laws.forEach((law) => {
+      const li = document.createElement("li");
+      li.textContent = law;
+      lawList.appendChild(li);
+    });
+  })
+  .catch((err) => {
+    console.error("Failed to fetch laws:", err);
+  });
 });

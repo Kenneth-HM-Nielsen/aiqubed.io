@@ -151,6 +151,20 @@ body {
   text-decoration: underline;
 }
 
+.law-listing {
+  margin-top: 2em;
+  background-color: #1a1a1a;
+  padding: 1em;
+  border-radius: 6px;
+  font-size: 1em;
+  color: #ccc;
+}
+
+.law-listing h3 {
+  margin-top: 0;
+  color: #66ccff;
+}
+
 @media (max-width: 960px) {
   .layout {
     flex-direction: column;
