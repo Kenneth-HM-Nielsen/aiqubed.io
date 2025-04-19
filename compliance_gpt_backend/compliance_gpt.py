@@ -98,6 +98,8 @@ async def ask_question(request: Request):
                 f"Spørgsmål: {question}"
             )
             result = qa_chain({"query": grounded_prompt})
+            for i, doc in enumerate(result["source_documents"]):
+                print(f"\n🔍 Chunk {i+1} Preview:\n{doc.page_content[:400]}")
 
         # Extract rich source metadata
         sources = []
