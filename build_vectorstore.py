@@ -20,7 +20,7 @@ output_folder.mkdir(parents=True, exist_ok=True)
 
 # Chunking config
 splitter = RecursiveCharacterTextSplitter(
-    chunk_size=750,
+    chunk_size=600,
     chunk_overlap=250,
      separators=["\n\n", "\n", ".", " ", ""]
 )
@@ -34,7 +34,9 @@ for pdf_path in pdf_folder.glob("*.pdf"):
     raw_docs = loader.load()
 
     for doc in raw_docs:
-        doc.metadata["source"] = pdf_path.name  # filename only
+        doc.metadata["source"] = pdf_path.name
+        doc.metadata["page"] = doc.metadata.get("page", "ukendt side")
+
     chunks = splitter.split_documents(raw_docs)
     all_chunks.extend(chunks)
 

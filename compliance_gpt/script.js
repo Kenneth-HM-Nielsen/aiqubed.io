@@ -22,13 +22,34 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    sourceArray.forEach(src => {
+    sourceArray.forEach((src, index) => {
       const li = document.createElement("li");
-      li.textContent = src + "...";
+
+      // Create clickable title
+      const title = document.createElement("div");
+      title.className = "source-title";
+      title.textContent = `${src.title}, side ${src.page}`;
+      title.style.cursor = "pointer";
+
+      // Create hidden snippet
+      const snippet = document.createElement("div");
+      snippet.className = "source-snippet";
+      snippet.textContent = src.snippet;
+      snippet.style.display = "none";
+      snippet.style.fontSize = "0.95em";
+      snippet.style.marginTop = "0.3em";
+      snippet.style.color = "#aaa";
+
+      // Toggle snippet on title click
+      title.addEventListener("click", () => {
+        snippet.style.display = snippet.style.display === "none" ? "block" : "none";
+      });
+
+      li.appendChild(title);
+      li.appendChild(snippet);
       list.appendChild(li);
     });
   }
-
 
   async function sendToBackend(mode = "chat") {
     const question = input.value.trim();

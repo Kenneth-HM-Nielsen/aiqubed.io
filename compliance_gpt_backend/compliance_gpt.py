@@ -79,10 +79,12 @@ async def ask_question(request: Request):
             result = qa_chain.invoke({"question": grounded_prompt})
 
         # Extract relevant source snippets
-        sources = [
-            doc.page_content[:300].strip().replace("\n", " ")
-            for doc in result.get("source_documents", [])
-        ]
+        sources = []
+        for doc in result.get("source_documents", []):
+            name = doc.metadata.get("source", "ukendt dokument").replace(".pdf", "").replace("_", " ").capitalize()
+            page = doc.metadata.get("page", "ukendt side")
+            snippet = doc.page_content.strip().replace("\n", " ")[:300]
+            sources.append(f"{name}, side {page}: {snippet}...")
 
         return {
             "answer": result["answer"],

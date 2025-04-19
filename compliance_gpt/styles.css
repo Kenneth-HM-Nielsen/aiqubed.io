@@ -142,6 +142,15 @@ body {
   color: #ccc;
 }
 
+.source-title {
+  font-weight: bold;
+  color: #66ccff;
+}
+
+.source-title:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 960px) {
   .layout {
     flex-direction: column;
